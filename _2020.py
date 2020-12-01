@@ -133,6 +133,6 @@ while True:
         log_level_input = get_int_input("Log level (defaults to level zero): ", None)
 
         module.play(params[1], program_input[1], log_level_input[1] if log_level_input[0] else 0)
-        print("Module {0} program ended\n".format(module.__name__))
+        print(f"Module {module.__name__} program ended\n")
 
 print("Goodbye and Merry Christmas 2020!")
