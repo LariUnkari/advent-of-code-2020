@@ -1,3 +1,36 @@
+def getProductTwoElements(expenses, log_level):
+    sum = 0
+    for posA, valA in enumerate(expenses):
+        for posB, valB in enumerate(expenses):
+            if posA == posB: continue
+
+            sum = valA + valB
+
+            if sum == 2020:
+                return ([(posA, valA), (posB, valB)], valA * valB)
+            elif log_level >= 2:
+                print(f"Expense[{posA}]({valA}) + Expense[{posB}]({valB}) sum {sum} does not equal 2020")
+
+    return ([], -1)
+
+def getProductThreeElements(expenses, log_level):
+    sum = 0
+    for posA, valA in enumerate(expenses):
+        for posB, valB in enumerate(expenses):
+            for posC, valC in enumerate(expenses):
+                if posA == posB or posA == posC or posB == posC:
+                    continue
+
+                sum = valA + valB + valC
+
+                if sum == 2020:
+                    return ([(posA, valA), (posB, valB), (posC, valC)], valA * valB * valC)
+                elif log_level >= 2:
+                    print(f"Expense[{posA}]({valA}) + Expense[{posB}]({valB}) + Expense[{posC}]({valC}) sum {sum} does not equal 2020")
+
+    return ([], -1)
+
+
 def play(input_file, input_parameters, log_level):
     
 
@@ -5,10 +38,6 @@ def play(input_file, input_parameters, log_level):
 
 
     print("Day 1 begins!")
-
-
-    #Part 1 of Day 1
-
 
     expenses = []
 
@@ -18,30 +47,24 @@ def play(input_file, input_parameters, log_level):
         if log_level >= 1:
             print(f"Added expense: {i}")
 
-    product = 0
-    vals = []
-    a = 0
-    b = 0
-    for e in range(len(expenses)):
-        for r in range(len(expenses)):
-            if e == r: continue
 
-            a = expenses[e]
-            b = expenses[r]
-            if a + b == 2020:
-                vals.append(a)
-                vals.append(b)
-                product = a * b
-                break
-            elif log_level >= 2:
-                print(f"Expense[{e}]({a}) + Expense[{r}]({b}) sum {a+b} does not equal 2020")
+    #Part 1 of Day 1
 
-        if (product > 0): break
 
-    if (len(vals) > 0):
-        print(f"Values {vals[0]} and {vals[1]} product is {product}")
+    result = getProductTwoElements(expenses, log_level)
+
+    if (result[1] >= 0):
+        print(f"Values {result[0][0]} and {result[0][1]} product is {result[1]}")
     else:
-        print("Unable to find values")
+        print("Unable to find values with a sum of 2020")
 
 
     #Part 2 of Day 1
+
+
+    result = getProductThreeElements(expenses, log_level)
+
+    if (result[1] >= 0):
+        print(f"Values {result[0][0]} and {result[0][1]} and {result[0][2]} product is {result[1]}")
+    else:
+        print("Unable to find values with a sum of 2020")
