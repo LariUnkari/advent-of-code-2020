@@ -1,4 +1,4 @@
-"""Advent of Code 2019 Solutions
+"""Advent of Code 2020 Solutions
 Author: Lari Unkari
 """
 
@@ -73,7 +73,7 @@ def get_program_and_input(input_string):
     """Returns a day solution program and input as tuple (module, input_file). If invalid, returns (None, None)"""
     
     mod = None
-    modName = "day{0:02d}"
+    modName = "modules.day{0:02d}"
     filepath = "data/day{0:02d}input.txt"
 
     try:

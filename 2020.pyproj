@@ -21,7 +21,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="day01.py">
+    <Compile Include="modules\day01.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modules\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="_2020.py" />
