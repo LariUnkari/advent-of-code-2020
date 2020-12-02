@@ -7,7 +7,7 @@ Author: Lari Unkari
 
 import importlib
 
-DAY_COUNT = 1
+DAY_COUNT = 2
 
 def get_day_input():
     """Takes in user input for day choice"""
@@ -118,7 +118,7 @@ while True:
             break
 
         #Input is a Tuple of (was_parse_success, list_of_int_values)
-        program_input = get_int_list_input("Program input: ",
+        program_input = get_int_list_input("\nProgram input: ",
             "Invalid input {0}, try again or press enter without input to exit!")
 
         if not program_input[0]:
@@ -130,9 +130,10 @@ while True:
         else:
             print("No input given")
 
-        log_level_input = get_int_input("Log level (defaults to level zero): ", None)
+        log_level_input = get_int_input("\nLog level (defaults to level zero): ", None)
 
+        print("\n\n************************\n")
         module.play(params[1], program_input[1], log_level_input[1] if log_level_input[0] else 0)
-        print(f"Module {module.__name__} program ended\n")
+        print(f"\nModule {module.__name__} program ended\n\n")
 
 print("Goodbye and Merry Christmas 2020!")
