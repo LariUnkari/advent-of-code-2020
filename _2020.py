@@ -7,7 +7,7 @@ Author: Lari Unkari
 
 import importlib
 
-DAY_COUNT = 2
+DAY_COUNT = 3
 
 def get_day_input():
     """Takes in user input for day choice"""
