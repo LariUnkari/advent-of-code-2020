@@ -24,9 +24,7 @@ def walkMap(map, startRow, startColumn, slope, log_level):
 
 def play(input_file, input_parameters, log_level):
     
-
     #Initialize and read input
-
 
     map = []
     for index, inputText in enumerate(input_file):
@@ -34,20 +32,26 @@ def play(input_file, input_parameters, log_level):
         if log_level >= 1:
             print(f"Input string {index}: '{map[index]}'")
 
+    # Select which part of day to run
+
     part_num = -1
     while part_num < 1:
         txt = input("Which part to run? 1-2 (defaults to 2): ")
         try:
             part_num = int(txt)
         except ValueError:
-            print(f"Invalid input {txt} given!")
+            part_num = 2
+
+    # Run
     
     if part_num == 1:
-        countTrees = walkMap(map, 0, SLOPES[1][0], SLOPES[1], log_level)
+        walkMap(map, 0, SLOPES[1][0], SLOPES[1], log_level)
     else:
         countTrees = 0
         treeCountProduct = 1
+
         for slope in SLOPES:
             countTrees = walkMap(map, 0, slope[0], slope, log_level)
             treeCountProduct *= countTrees
+
         print(f"Trees count total product is {treeCountProduct}")
