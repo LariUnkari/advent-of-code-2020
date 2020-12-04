@@ -2,9 +2,11 @@
 Author: Lari Unkari
 """
 
+import modules.userInput
+
 SLOPES = [(1,1), (3,1), (5,1), (7,1), (1,2)]
 
-def walkMap(map, startRow, startColumn, slope, log_level):
+def walk_map(map, startRow, startColumn, slope, log_level):
     width = len(map[0])
     height = len(map)
 
@@ -26,32 +28,26 @@ def play(input_file, input_parameters, log_level):
     
     #Initialize and read input
 
-    map = []
+    mapData = []
     for index, inputText in enumerate(input_file):
-        map.append(inputText.replace('\n', ''))
+        mapData.append(inputText.replace('\n', ''))
         if log_level >= 1:
             print(f"Input string {index}: '{map[index]}'")
 
     # Select which part of day to run
 
-    part_num = -1
-    while part_num < 1:
-        txt = input("Which part to run? 1-2 (defaults to 2): ")
-        try:
-            part_num = int(txt)
-        except ValueError:
-            part_num = 2
+    partInput = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
 
     # Run
     
-    if part_num == 1:
-        walkMap(map, 0, SLOPES[1][0], SLOPES[1], log_level)
+    if partInput[1] == 1:
+        walk_map(mapData, 0, SLOPES[1][0], SLOPES[1], log_level)
     else:
         countTrees = 0
         treeCountProduct = 1
 
         for slope in SLOPES:
-            countTrees = walkMap(map, 0, slope[0], slope, log_level)
+            countTrees = walk_map(mapData, 0, slope[0], slope, log_level)
             treeCountProduct *= countTrees
 
         print(f"Trees count total product is {treeCountProduct}")

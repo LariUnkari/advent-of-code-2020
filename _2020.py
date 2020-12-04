@@ -86,6 +86,6 @@ while True:
 
         print("\n\n************************\n")
         mod.play(params[1], program_input[1], log_level_input[1] if log_level_input[0] else 0)
-        print(f"\nModule {module.__name__} program ended\n\n")
+        print(f"\nModule {mod.__name__} program ended\n\n")
 
 print("Goodbye and Merry Christmas 2020!")
