@@ -21,15 +21,16 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="modules\day01.py">
+    <Compile Include="days\day01.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="modules\day02.py">
+    <Compile Include="days\day02.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="modules\day03.py">
+    <Compile Include="days\day03.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="days\__init__.py" />
     <Compile Include="modules\__init__.py">
       <SubType>Code</SubType>
     </Compile>
@@ -38,6 +39,7 @@
   <ItemGroup>
     <Folder Include="modules\" />
     <Folder Include="data\" />
+    <Folder Include="days\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="data\day01input.txt" />
