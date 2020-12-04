@@ -31,6 +31,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="days\__init__.py" />
+    <Compile Include="modules\userInput.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="modules\__init__.py">
       <SubType>Code</SubType>
     </Compile>

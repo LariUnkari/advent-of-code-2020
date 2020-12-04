@@ -5,69 +5,17 @@ Author: Lari Unkari
 
 #Definitions
 
-import importlib
+import importlib, modules.userInput
 
 DAY_COUNT = 3
 
 def get_day_input():
     """Takes in user input for day choice"""
 
-    print(f"Advent of Code 2020 by Lari Unkari\n\n"+
-          "Select day (1-{0:d}), then press enter.\n".format(DAY_COUNT)+
-          "Give an empty input or 'exit' to end program")
+    print(f"Select day (1-{0:d}), then press enter.\n".format(DAY_COUNT)+
+          "Give an empty input or 'exit' to end program\n")
 
     return input("Choose the day: ")
-
-def get_int_list_input(prompt, invalid_prompt):
-    """Get integer list input from user, returns a tuple (is_valid, input_list)"""
-
-    input_list = []
-    is_input_valid = False
-
-    while not is_input_valid:
-        is_input_valid = True
-        input_text = input(prompt)
-
-        #Empty input is valid too
-        if len(input_text) == 0:
-            break
-
-        try:
-            for txt in input_text.split(","):
-                input_list.append(int(txt))
-        except ValueError:
-            input_list = []
-            is_input_valid = False
-
-            if invalid_prompt != None:
-                print(invalid_prompt.format(input_text))
-            else:
-                break
-
-    return (is_input_valid, input_list)
-
-
-def get_int_input(prompt, invalid_prompt):
-    """Get integer input from user"""
-
-    input_value = 0
-    is_input_valid = False
-    while not is_input_valid:
-        txt = input(prompt)
-
-        if len(txt) == 0:
-            break
-
-        try:
-            input_value = int(txt)
-            is_input_valid = True
-        except ValueError:
-            if invalid_prompt != None:
-                print(invalid_prompt.format(input_value))
-            else:
-                break
-
-    return (is_input_valid, input_value)
 
 def get_program_and_input(input_string):
     """Returns a day solution program and input as tuple (module, input_file). If invalid, returns (None, None)"""
@@ -80,9 +28,11 @@ def get_program_and_input(input_string):
         value = int(input_string)
 
         if value < 1:
-            print(f"Invalid day value {value} given!")
+            print(f"Invalid day value {value} given!\n")
+            return (None, None)
         elif value > DAY_COUNT:
-            print(f"Day {value} has not been reached yet!")
+            print(f"Day {value} has not been reached yet!\n")
+            return (None, None)
         else:
             day = modName.format(value)
             print(f"Day {value} given, importing {day}")
@@ -99,6 +49,8 @@ def get_program_and_input(input_string):
 
 USER_INPUT = "0"
 
+print("Advent of Code 2020 by Lari Unkari\n\n")
+
 while True:
     USER_INPUT = get_day_input()
     
@@ -106,9 +58,9 @@ while True:
         break
 
     params = get_program_and_input(USER_INPUT)
-    if params != None:
-        module = params[0]
-        if module == None:
+    if params != None and params[0] != None:
+        mod = params[0]
+        if mod == None:
             print(f"No module found for {USER_INPUT}")
             break
 
@@ -118,7 +70,7 @@ while True:
             break
 
         #Input is a Tuple of (was_parse_success, list_of_int_values)
-        program_input = get_int_list_input("\nProgram input: ",
+        program_input = modules.userInput.get_int_list_input("\nProgram input: ",
             "Invalid input {0}, try again or press enter without input to exit!")
 
         if not program_input[0]:
@@ -130,10 +82,10 @@ while True:
         else:
             print("No input given")
 
-        log_level_input = get_int_input("\nLog level (defaults to level zero): ", None)
+        log_level_input = modules.userInput.get_int_input("\nLog level (defaults to level zero): ", None)
 
         print("\n\n************************\n")
-        module.play(params[1], program_input[1], log_level_input[1] if log_level_input[0] else 0)
+        mod.play(params[1], program_input[1], log_level_input[1] if log_level_input[0] else 0)
         print(f"\nModule {module.__name__} program ended\n\n")
 
 print("Goodbye and Merry Christmas 2020!")
