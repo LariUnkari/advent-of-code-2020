@@ -27,6 +27,7 @@
     <Compile Include="days\day02.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="days\day04.py" />
     <Compile Include="days\day03.py">
       <SubType>Code</SubType>
     </Compile>
@@ -48,6 +49,7 @@
     <Content Include="data\day01input.txt" />
     <Content Include="data\day02input.txt" />
     <Content Include="data\day03input.txt" />
+    <Content Include="data\day04input.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
