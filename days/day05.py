@@ -36,15 +36,16 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
     entries = []
     for i in range(len(inputs) - 1):
         if log_level >= 1:
-            print(f"Seat {index} data: {inputs[i][:7]},{inputs[i][7:]}")
+            print(f"Seat {i} data: {inputs[i][:7]},{inputs[i][7:]}")
         entries.append((inputs[i][:7], inputs[i][7:]))
 
     # Select which part of day to run
     
-    #part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
+    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
 
     # Run
 
+    seats = [None] * ROWS * COLS
     highest_id = -1
     row = 0
     col = 0
@@ -58,7 +59,23 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         if log_level >= 1:
             print(f"Seat {index} position is R[{entry[0]}]:{row} C[{entry[1]}]:{col} ID:{id}")
 
-        if id > highest_id:
-            highest_id = id
+        if part_input[1] == 1:
+            if id > highest_id:
+                highest_id = id
+        else:
+            seats[id] = (row, col)
 
-    print(f"Highest seat ID:{highest_id}")
+    if part_input[1] == 1:
+        print(f"Highest seat ID:{highest_id}")
+    else:
+        for i in range(ROWS * COLS):
+            if seats[i] == None:
+                row = i // COLS
+                col = i - row
+
+                if (i + 1 < len(seats) and seats[i+1] == None) or (i > 0 and seats[i-1] == None):
+                    if log_level >= 1:
+                        print(f"Seat {i} at R{row},C{col} is missing!")
+                else:
+                    print(f"My seat is ID:{i} at R{row},C{col}")
+                    break
