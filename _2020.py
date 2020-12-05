@@ -21,7 +21,7 @@ def get_program_and_input(input_string):
     """Returns a day solution program and input as tuple (module, input_file). If invalid, returns (None, None)"""
     
     mod = None
-    modName = "days.day{0:02d}"
+    modName = "day{0:02d}"
     filepath = "data/day{0:02d}input.txt"
 
     try:
@@ -36,7 +36,7 @@ def get_program_and_input(input_string):
         else:
             day = modName.format(value)
             print(f"Day {value} given, importing {day}")
-            mod = importlib.import_module(day)
+            mod = importlib.import_module("."+day, package='days')
     except ValueError:
         print(f"Invalid input {input_string} given!")
         return (None, None)
