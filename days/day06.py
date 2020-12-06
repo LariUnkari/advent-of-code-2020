@@ -15,21 +15,41 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     # Select which part of day to run
     
-    #part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
+    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
 
     # Run
     
     sum = 0
+
     groupAnswers = {}
     groups = [{}] * len(inputs)
-    for index, group in enumerate(inputs):
-        for person in group:
-            for answer in person:
-                groupAnswers[answer] = True
+    groupAnswerCounts = []
 
+    for index, group in enumerate(inputs):
+        groupAnswerCounts.append({})
+
+        for id, person in enumerate(group):
+            for answer in person:
+                if part_input[1] == 1:
+                    groupAnswers[answer] = True
+                else:
+                    if answer in groupAnswerCounts[index]:
+                        groupAnswerCounts[index][answer] += 1
+                    else:
+                        groupAnswerCounts[index][answer] = 1
+            
         groups[index] = groupAnswers;
-        if log_level >= 1: print(f"Group {index} answered yes to {len(groupAnswers)} questions")
-        if log_level >= 2: print(f"Group {index} positive answers: {groupAnswers.keys()}")
+
+        if part_input[1] == 1:
+            if log_level >= 1: print(f"Group {index} answered yes to {len(groupAnswers)} questions")
+        else:
+            for answer, count in groupAnswerCounts[index].items():
+                if count >= len(group):
+                    groupAnswers[answer] = True
+
+            if log_level >= 1: print(f"All {len(group)} of group {index} answered yes to {len(groupAnswers)} question")
+            
+        if log_level >= 2: print(f"All group {index} positive answers: {groupAnswers.keys()}")
 
         sum += len(groupAnswers)
         groupAnswers.clear()
