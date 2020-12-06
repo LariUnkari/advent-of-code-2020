@@ -44,7 +44,7 @@ def get_program_and_input(input_string):
 
 #Program
 
-DAY_COUNT = 5
+DAY_COUNT = 6
 USER_INPUT = "0"
 
 print("Advent of Code 2020 by Lari Unkari\n\n")
