@@ -5,7 +5,7 @@ Author: Lari Unkari
 
 #Definitions
 
-import importlib, modules.userInput
+import os, importlib, modules.userInput
 
 def get_day_input():
     """Takes in user input for day choice"""
@@ -44,7 +44,7 @@ def get_program_and_input(input_string):
 
 #Program
 
-DAY_COUNT = 6
+DAY_COUNT = len([f for f in os.listdir("days/") if f.startswith("day") == True])
 USER_INPUT = "0"
 
 print("Advent of Code 2020 by Lari Unkari\n\n")
