@@ -7,11 +7,12 @@ import io, re, modules.userInput
 MY_BAG = "shiny gold"
 
 def check_bag_for(allBagsDict, verifiedBagsDict, bagType, contentType, log_level):
-    foundChild = False
-
     if bagType in verifiedBagsDict:
         if log_level >= 3: print(f"Bag {bagType}, already verified")
         return True
+
+    if log_level >= 1: print(f"Checking bag type {bagType} for {contentType}")
+    foundChild = False
 
     if allBagsDict[bagType] == None:
         if log_level >= 3: print(f"Bag {bagType} can NOT contain anything")
@@ -32,6 +33,24 @@ def check_bag_for(allBagsDict, verifiedBagsDict, bagType, contentType, log_level
         return True
 
     return False
+
+def count_children_of(allBagsDict, bagType, log_level):
+    if allBagsDict[bagType] == None:
+        return 0
+
+    childrenFound = 0
+    directChildCount = 0
+
+    for subType in allBagsDict[bagType]:
+        if log_level >= 1: print(f"Bag {bagType} can directly contain {subType[0]} of {subType[1]}")
+        directChildCount += subType[0]
+
+        if log_level >= 2: print(f"Bag {subType[1]}, child of {bagType}, counting children...")
+        childrenFound += subType[0] * count_children_of(allBagsDict, subType[1], log_level)
+
+    if log_level >= 1: print(f"Bag {bagType} can directly contain {directChildCount} children and a total of {directChildCount+childrenFound} descendants")
+    return directChildCount + childrenFound
+
 
 def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
     
@@ -55,7 +74,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
             bags[bagType] = None
             continue
 
-        bags[bagType] = [(content[0], content[1]) for content in re.findall(regex, inputs[i][indexContain+13:])]
+        bags[bagType] = [(int(content[0]), content[1]) for content in re.findall(regex, inputs[i][indexContain+13:])]
 
         if log_level >= 2:
             for c in bags[bagType]: print(f"Can contain {c[0]} of '{c[1]}'")
@@ -70,12 +89,12 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     if part_input[1] == 1:
         for bagType in bags.keys():
-            if log_level >= 1: print(f"Checking bag type {bagType}")
-
             check_bag_for(bags, bagDict, bagType, MY_BAG, log_level)
 
-            if log_level >= 2: print(f"Done checking bag type {bagType}")
+        print(f"A {MY_BAG} bag can be contained within {len(bagDict)} bag types")
 
-        print(f"{MY_BAG} can be contained within {len(bagDict)} bag types")
         if log_level >= 1:
             print(f"All verified bag types:\n{bagDict.keys()}")
+    else:
+        countChildren = count_children_of(bags, MY_BAG, log_level)
+        print(f"My {MY_BAG} bag's children total count: {countChildren}")
