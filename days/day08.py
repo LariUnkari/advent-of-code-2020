@@ -38,8 +38,8 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         arg = program[i][1]
 
         if cmd == "jmp":
+            if log_level >= 1: print(f"[{i}] Jumping by arg: {arg} to line: {i+arg}")
             i += arg
-            if log_level >= 1: print(f"[{i}] Jumping by arg: {arg} to line: {i}")
         else:
             if cmd == "nop":
                 if log_level >= 1: print(f"[{i}] No operation, arg: {arg}")
@@ -48,3 +48,5 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
                 if log_level >= 1: print(f"[{i}] Accumulate, arg: {arg}, acc: {acc}")
 
             i += 1
+
+    print(f"\nProgram terminated with value {acc} in the accumulator")
