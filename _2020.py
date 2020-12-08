@@ -7,10 +7,12 @@ Author: Lari Unkari
 
 import os, importlib, modules.userInput
 
+DAY_COUNT = len([f for f in os.listdir("days/") if f.startswith("day") == True])
+
 def get_day_input():
     """Takes in user input for day choice"""
 
-    print(f"Select day (1-{0:d}), then press enter.\n".format(DAY_COUNT)+
+    print(f"Select day (1-{DAY_COUNT:d}), then press enter.\n"+
           "Give an empty input or 'exit' to end program\n")
 
     return input("Choose the day: ")
@@ -44,7 +46,6 @@ def get_program_and_input(input_string):
 
 #Program
 
-DAY_COUNT = len([f for f in os.listdir("days/") if f.startswith("day") == True])
 USER_INPUT = "0"
 
 print("Advent of Code 2020 by Lari Unkari\n\n")
