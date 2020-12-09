@@ -14,8 +14,8 @@ def run(cmds, args, log_level):
     a:int
     while i >= 0 and i < len(cmds):
         if i in visited:
-            print(f"Revisiting line {i}, breaking out of loop with acc: {acc}")
-            return (-1, acc)
+            if log_level >= 1: print(f"Revisiting line {i}, breaking out of loop with acc: {acc}")
+            return None
 
         visited[i] = True
         c = cmds[i]
@@ -34,7 +34,7 @@ def run(cmds, args, log_level):
             i += 1
 
     print(f"\nProgram terminated with value {acc} in the accumulator")
-    return (0, acc)
+    return acc
 
 def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
     
@@ -54,33 +54,33 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
     # Select which part of day to run
     
     part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
+
+    # Run
+
     if part_input[1] == 1:
         run(cmds, args, log_level)
     else:
         lineToEdit:int = -1
         cmdToSet:str = ""
-        newCmds = cmds.copy()
 
         # BRUTE FORCE, ENGAGE!
         retVal = None
-        for index, cmd in enumerate(newCmds):
+        for index, cmd in enumerate(cmds):
             if cmd == "jmp":
-                newCmds[index] = "nop"
+                cmds[index] = "nop"
             elif cmd == "nop":
-                newCmds[index] = "jmp"
+                cmds[index] = "jmp"
                 
-            if log_level >= 1: print(f"Replaced command {cmd} at line {index} with {newCmds[index]}")
-            retVal = run(newCmds, args, log_level - 1)
-            if retVal[0] == 0:
+            if log_level >= 1: print(f"Replaced command '{cmd}' at line {index} with {cmds[index]}")
+            retVal = run(cmds, args, log_level - 1)
+            if retVal != None:
                 lineToEdit = index
-                cmdToSet = newCmds[index]
-                print(f"Replacing line {lineToEdit} command with {cmdToSet} allowed program to terminate")
+                cmdToSet = cmds[index]
+                print(f"Replacing line {lineToEdit} command with '{cmdToSet}' allowed program to terminate with value {retVal} in accumulator")
                 break
             
-            newCmds[index] = cmd
+            cmds[index] = cmd
             retVal = None
 
-        print(f"Final value in accumulator with fixed program: {retVal[1]}")
-        cmds[lineToEdit] = cmdToSet
-
-    # Run
+        if lineToEdit < 0:
+            print("Failed to fix program :(")
