@@ -67,20 +67,24 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         retVal = None
         for index, cmd in enumerate(cmds):
             if cmd == "jmp":
-                cmds[index] = "nop"
+                cmdToSet = "nop"
             elif cmd == "nop":
-                cmds[index] = "jmp"
+                cmdToSet = "jmp"
+            else:
+                continue
                 
+            cmds[index] = cmdToSet
             if log_level >= 1: print(f"Replaced command '{cmd}' at line {index} with {cmds[index]}")
+
             retVal = run(cmds, args, log_level - 1)
             if retVal != None:
                 lineToEdit = index
-                cmdToSet = cmds[index]
-                print(f"Replacing line {lineToEdit} command with '{cmdToSet}' allowed program to terminate with value {retVal} in accumulator")
                 break
             
             cmds[index] = cmd
             retVal = None
 
-        if lineToEdit < 0:
+        if lineToEdit >= 0:
+            print(f"Replacing line {lineToEdit} command with '{cmdToSet}' allowed program to terminate with value {retVal} in accumulator")
+        else:
             print("Failed to fix program :(")
