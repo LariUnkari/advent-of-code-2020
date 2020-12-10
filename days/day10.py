@@ -12,17 +12,16 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
     
     # Initialize and read input
     
-    adapters = []
-    for line in input_stream.read().split('\n'):
-        if len(line) == 0 or line.strip() == '\n':
-            continue
-
-        if log_level >= 1: print(f"Found adapter {len(adapters)}, rated for {line} jolts")
-        adapters.append(int(line))
-
+    adapters = [int(line) for line in input_stream.read().split('\n') if line.strip()]
     adapters.sort()
+
+    if log_level >= 1:
+        for i, a in enumerate(adapters): print(f"Adapter {i}, rated for {a} jolts")
+
     deviceRating = adapters[len(adapters) - 1] + DEVICE_DIFF
     adapters.append(deviceRating)
+
+    if log_level >= 1: print(f"Device will be at {deviceRating} jolts")
 
     # Select which part of day to run
     
