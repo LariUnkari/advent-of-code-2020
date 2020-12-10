@@ -8,15 +8,11 @@ DIFF_MIN = 1
 DIFF_MAX = 3
 DEVICE_DIFF = 3
 
-def find_arrangements(adapters, index, path, foundPaths, log_level):
-    path.append(index)
-
+def find_arrangements(adapters, index, pathsFound, log_level):
     if index == len(adapters) - 1:
-        if log_level >= 1:
-            valPath = [adapters[i] for i in path]
-            print(f"Found a viable path: {path}\n   Values: {valPath}")
-        foundPaths.append(path)
-        return
+        if log_level >= 1 or pathsFound % 100000 == 0:
+           print(f"Found a viable path {pathsFound}")
+        return pathsFound + 1
 
     for i in range(index + 1, len(adapters)):
         a = adapters[index]
@@ -27,11 +23,10 @@ def find_arrangements(adapters, index, path, foundPaths, log_level):
             if log_level >= 3: print(f"Invalid next adapter[{i}] rating {b}, previous adapter[{index}] {a}, expecting diff {d} in range {DIFF_MIN}-{DIFF_MAX}, both inclusive")
             break
 
-        if log_level >= 2:
-            valPath = [adapters[p] for p in path]
-            print(f"Found new branch for adapter arrangement {path} -> {i}\n   Values: {valPath} -> {b}")
+        if log_level >= 2: print(f"Found new branch for arrangement[{pathsFound}], adapter[{index}] {a} -> adapter[{i}] {b}")
+        pathsFound = find_arrangements(adapters, i, pathsFound, log_level)
 
-        find_arrangements(adapters, i, path.copy(), foundPaths, log_level)
+    return pathsFound
 
 def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
     
@@ -82,8 +77,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         prod = diffCounts[1] * diffCounts[3]
         print(f"Final device rating is {deviceRating}, product of diff counts 1 ({diffCounts[1]}) 3 ({diffCounts[3]}) is {prod}")
     else:
-        foundPaths = []
         adapters.insert(0, 0)
-        find_arrangements(adapters, 0, [], foundPaths, log_level)
+        pathsFound = find_arrangements(adapters, 0, 0, log_level)
 
-        print(f"Found {len(foundPaths)} valid arrangements")
+        print(f"Found {pathsFound} valid arrangements")
