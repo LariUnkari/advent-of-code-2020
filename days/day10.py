@@ -8,26 +8,6 @@ DIFF_MIN = 1
 DIFF_MAX = 3
 DEVICE_DIFF = 3
 
-def find_arrangements(adapters, index, pathsFound, log_level):
-    if index == len(adapters) - 1:
-        if log_level >= 1 or pathsFound % 100000 == 0:
-           print(f"Found a viable path {pathsFound}")
-        return pathsFound + 1
-
-    for i in range(index + 1, len(adapters)):
-        a = adapters[index]
-        b = adapters[i]
-        d = b-a
-
-        if d < DIFF_MIN or d > DIFF_MAX:
-            if log_level >= 3: print(f"Invalid next adapter[{i}] rating {b}, previous adapter[{index}] {a}, expecting diff {d} in range {DIFF_MIN}-{DIFF_MAX}, both inclusive")
-            break
-
-        if log_level >= 2: print(f"Found new branch for arrangement[{pathsFound}], adapter[{index}] {a} -> adapter[{i}] {b}")
-        pathsFound = find_arrangements(adapters, i, pathsFound, log_level)
-
-    return pathsFound
-
 def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
     
     # Initialize and read input
@@ -66,8 +46,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         
             if log_level >= 1: print(f"Adapter rating {a}, previous {ratingPrevious}, diff {d}")
             allDiffs.append(d)
-        
-        
+
             diffCounts[d] += 1
             ratingPrevious = a
     
@@ -78,6 +57,28 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         print(f"Final device rating is {deviceRating}, product of diff counts 1 ({diffCounts[1]}) 3 ({diffCounts[3]}) is {prod}")
     else:
         adapters.insert(0, 0)
-        pathsFound = find_arrangements(adapters, 0, 0, log_level)
+        pathsFound = [0] * len(adapters)
 
-        print(f"Found {pathsFound} valid arrangements")
+        a:int
+        b:int
+        d:int
+        branchesFound:int
+        for index in reversed(range(len(adapters)-1)):
+            branchesFound = 0
+
+            for i in range(index + 1, len(adapters)):
+                a = adapters[index]
+                b = adapters[i]
+                d = b-a
+
+                if d < DIFF_MIN or d > DIFF_MAX:
+                    if log_level >= 3: print(f"Invalid next adapter[{i}] rating {b}, previous adapter[{index}] {a}, expecting diff {d} in range {DIFF_MIN}-{DIFF_MAX}, both inclusive")
+                    break
+
+                branchesFound += 1
+                pathsFound[index] += max(1, pathsFound[i])
+                if log_level >= 2: print(f"Found new branch from adapter[{index}] {a} to adapter[{i}] {b} which has {pathsFound[i]} options, total now {pathsFound[index]}")
+        
+            if log_level >= 1: print(f"Found {branchesFound} valid branches from adapter[{index}] {adapters[index]}, total now at {pathsFound[index]}")
+            
+        print(f"Found {pathsFound[0]} valid arrangements")
