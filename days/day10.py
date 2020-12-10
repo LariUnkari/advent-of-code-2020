@@ -17,7 +17,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         if len(line) == 0 or line.strip() == '\n':
             continue
 
-        if log_level >= 1: print(f"Found adapter {len(nums)}, rated for {line} jolts")
+        if log_level >= 1: print(f"Found adapter {len(adapters)}, rated for {line} jolts")
         adapters.append(int(line))
 
     # Run
