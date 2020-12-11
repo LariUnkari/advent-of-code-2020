@@ -8,23 +8,36 @@ EMPTY_SEAT = 'L'
 OCCUPIED_SEAT = '#'
 NEIGHBOURS = [(0,1), (1,1), (1,0), (1,-1), (0,-1), (-1,-1), (-1,0), (-1,1)]
 
-def count_neighbours(x, y, width, height, layout, rule, stopAt, log_level):
+def count_neighbours(x, y, width, height, layout, allowDistance, rule, stopAt, limit, log_level):
     adjacentSeats = 0
+    d:int
     u:int
     v:int
 
+    if log_level >= 4: print(f"Checking seat {x},{y} neighbours for {rule}, stop at {stopAt}")
+    
     for n in NEIGHBOURS:
-        u = x + n[0]
-        if u < 0 or u >= width: continue
+        d = 1
 
-        v = y + n[1]
-        if v < 0 or v >= height: continue
+        while d <= 1 or allowDistance:
+            u = x + n[0] * d
+            if u < 0 or u >= width: break
 
-        if layout[v][u] == rule:
-            adjacentSeats += 1
+            v = y + n[1] * d
+            if v < 0 or v >= height: break
 
-        if adjacentSeats == stopAt:
-           return adjacentSeats
+            if stopAt and layout[v][u] == stopAt:
+                if log_level >= 4: print(f"Seat {u},{v}, dist {d} from {x},{y} is {stopAt}")
+                break
+            if layout[v][u] == rule:
+                if log_level >= 4: print(f"Seat {u},{v}, dist {d} from {x},{y} is {rule}")
+                adjacentSeats += 1
+                break
+            
+            if log_level >= 4: print(f"Seat {u},{v}, dist {d} from {x},{y} is NOT {rule}")
+            d += 1
+
+        if adjacentSeats >= limit: break
 
     return adjacentSeats
 
@@ -38,29 +51,38 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     if log_level >= 1: print(f"Layout dimensions: {width}x{height}")
 
+    # Select which part of day to run
+    
+    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
+
     # Run
+
+    allowDistance = part_input[1] != 1
 
     changes = []
     adjacentSeats:int
+    targetAdjacents:int
     round = 0
 
     while True:
         for y in range(height):
             for x in range(width):
                 if layout[y][x] == EMPTY_SEAT:
-                    adjacentSeats = count_neighbours(x, y, width, height, layout, OCCUPIED_SEAT, 1, log_level)
+                    targetAdjacents = 0
+                    adjacentSeats = count_neighbours(x, y, width, height, layout, allowDistance, OCCUPIED_SEAT, EMPTY_SEAT, targetAdjacents + 1, log_level)
                 
-                    if log_level >= 2: print(f"Round {round}: Seat {x},{y} has {adjacentSeats} neighbours")
+                    if log_level >= 3: print(f"Round {round}: Seat {x},{y} has {adjacentSeats} neighbours")
 
-                    if adjacentSeats == 0:
+                    if adjacentSeats == targetAdjacents:
                         if log_level >= 3: print(f"Round {round}: Seat {x},{y} going to be occupied")
                         changes.append((x, y, OCCUPIED_SEAT))
                 elif layout[y][x] == OCCUPIED_SEAT:
-                    adjacentSeats = count_neighbours(x, y, width, height, layout, OCCUPIED_SEAT, 4, log_level)
+                    targetAdjacents = 5 if allowDistance else 4
+                    adjacentSeats = count_neighbours(x, y, width, height, layout, allowDistance, OCCUPIED_SEAT, EMPTY_SEAT, targetAdjacents, log_level)
 
-                    if log_level >= 2: print(f"Round {round}: Seat {x},{y} has {adjacentSeats} neighbours")
+                    if log_level >= 3: print(f"Round {round}: Seat {x},{y} has {adjacentSeats} neighbours")
 
-                    if adjacentSeats == 4:
+                    if adjacentSeats == targetAdjacents:
                         if log_level >= 3: print(f"Round {round}: Seat {x},{y} going to be empty")
                         changes.append((x, y, EMPTY_SEAT))
 
