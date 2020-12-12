@@ -27,6 +27,7 @@
     <Compile Include="days\day02.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="days\day12.py" />
     <Compile Include="days\day11.py" />
     <Compile Include="days\day10.py" />
     <Compile Include="days\day09.py" />
@@ -53,6 +54,7 @@
     <Folder Include="days\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="data\day12input.txt" />
     <Content Include="data\day11input.txt" />
     <Content Include="data\day10input.txt" />
     <Content Include="data\day09input.txt" />
