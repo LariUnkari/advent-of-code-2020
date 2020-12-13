@@ -27,6 +27,7 @@
     <Compile Include="days\day02.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="days\day13.py" />
     <Compile Include="days\day12.py" />
     <Compile Include="days\day11.py" />
     <Compile Include="days\day10.py" />
@@ -54,18 +55,19 @@
     <Folder Include="days\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="data\day12input.txt" />
-    <Content Include="data\day11input.txt" />
-    <Content Include="data\day10input.txt" />
-    <Content Include="data\day09input.txt" />
-    <Content Include="data\day08input.txt" />
-    <Content Include="data\day07input.txt" />
-    <Content Include="data\day06input.txt" />
-    <Content Include="data\day05input.txt" />
-    <Content Include="data\day01input.txt" />
-    <Content Include="data\day02input.txt" />
-    <Content Include="data\day03input.txt" />
-    <Content Include="data\day04input.txt" />
+    <Content Include="data\input01.txt" />
+    <Content Include="data\input02.txt" />
+    <Content Include="data\input03.txt" />
+    <Content Include="data\input04.txt" />
+    <Content Include="data\input05.txt" />
+    <Content Include="data\input06.txt" />
+    <Content Include="data\input07.txt" />
+    <Content Include="data\input08.txt" />
+    <Content Include="data\input09.txt" />
+    <Content Include="data\input10.txt" />
+    <Content Include="data\input11.txt" />
+    <Content Include="data\input12.txt" />
+    <Content Include="data\input13.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -22,7 +22,7 @@ def get_program_and_input(input_string):
     
     mod = None
     modName = "day{0:02d}"
-    filepath = "data/day{0:02d}input.txt"
+    filepath = "data/input{0:02d}.txt"
 
     try:
         value = int(input_string)
