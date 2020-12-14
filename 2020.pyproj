@@ -27,6 +27,7 @@
     <Compile Include="days\day02.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="days\day14.py" />
     <Compile Include="days\day13.py" />
     <Compile Include="days\day12.py" />
     <Compile Include="days\day11.py" />
@@ -67,6 +68,7 @@
     <Content Include="data\input10.txt" />
     <Content Include="data\input11.txt" />
     <Content Include="data\input12.txt" />
+    <Content Include="data\input14.txt" />
     <Content Include="data\input13.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
