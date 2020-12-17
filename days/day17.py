@@ -65,22 +65,23 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
             for y in range(loY-1, hiY+2):
                 for z in range(loZ-1, hiZ+2):
                     for w in (range(0, 1) if part_input[1] == 1 else range(loW-1, hiW+2)):
-                        neighbourCount = count_active_neighbours(cubeMap, x, y, z, w, log_level)
-                        if log_level >= 2: print(f"[{cycle}] cube {x},{y},{z},{w} has {neighbourCount} neighbours")
-
                         coordinate = (x, y, z, w)
+                        neighbourCount = count_active_neighbours(cubeMap, x, y, z, w, log_level)
+
+                        if log_level >= 2: print(f"[{cycle}] cube {coordinate} has {neighbourCount} neighbours")
+
                         if coordinate in cubeMap and cubeMap[coordinate] == CUBE_ON:
                             if neighbourCount in STAY_ACTIVE:
-                                if log_level >= 2: print(f"[{cycle}]  Active  cube {x},{y},{z},{w} has {neighbourCount} neighbours and will stay active")
+                                if log_level >= 2: print(f"[{cycle}]  Active  cube {coordinate} has {neighbourCount} neighbours and will stay active")
                             else:
-                                if log_level >= 2: print(f"[{cycle}]  Active  cube {x},{y},{z},{w} has {neighbourCount} neighbours and will turn inactive")
+                                if log_level >= 2: print(f"[{cycle}]  Active  cube {coordinate} has {neighbourCount} neighbours and will turn inactive")
                                 changes.append((coordinate, CUBE_OFF))
                         else:
                             if neighbourCount == TURN_ACTIVE:
-                                if log_level >= 2: print(f"[{cycle}] Inactive cube {x},{y},{z},{w} has {neighbourCount} neighbours and will turn active")
+                                if log_level >= 2: print(f"[{cycle}] Inactive cube {coordinate} has {neighbourCount} neighbours and will turn active")
                                 changes.append((coordinate, CUBE_ON))
                             else:
-                                if log_level >= 2: print(f"[{cycle}] Inactive cube {x},{y},{z},{w} has {neighbourCount} neighbours and will stay inactive")
+                                if log_level >= 2: print(f"[{cycle}] Inactive cube {coordinate} has {neighbourCount} neighbours and will stay inactive")
 
         if log_level >= 1: print(f"[{cycle}] Applying, {len(changes)} changes to cube map")
         for c in changes:
@@ -97,23 +98,27 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
         print(f"[{cycle}] Cycle ended, map range now ({loX} - {hiX}), ({loY} - {hiY}), ({loZ} - {hiZ}), ({loW} - {hiW})")
 
-        if log_level >= 2 and part_input[1] == 1:
+        # This prints a pretty map z layer at a time, but skips it in part 2 and 4D map
+        # Similar to looks of sample in the puzzle, but doesn't fool the user and actually prints X and Y coordinates
+        if log_level >= 1 and part_input[1] == 1:
             s1:str
             s2:str
             for z in range(loZ, hiZ+1):
-                s1 = "Z={: 02d}  ".format(z)
-                s2 = "     " if loX % 2 == 0 else "       "
+                s1 = "Z={: 02d}   X: ".format(z) + ("  " if loX % 2 == 0 else "")
+                s2 = "Y:        " + ("" if loX % 2 == 0 else "  ")
                 for x in range(loX, hiX+1):
                     if x % 2 == 0:
-                        s2 += "{: 02d}".format(x)
+                        s2 += "{: 02d}  ".format(x)
                     else:
-                        s1 += "{: 02d}".format(x)
+                        s1 += "{: 02d}  ".format(x)
 
                 print(f"\n{s1}\n{s2}")
                 for y in range(loY, hiY+1):
                     s1 = "{: 02d}".format(y)
-                    s2 = "".join([cubeMap[(x,y,z,0)] if (x,y,z,0) in cubeMap else CUBE_OFF for x in range(loX, hiX+1)])
-                    print(f"{s1}     {s2}")
+                    s2 = " ".join([cubeMap[(x,y,z,0)] if (x,y,z,0) in cubeMap else CUBE_OFF for x in range(loX, hiX+1)])
+                    print(f"{s1}         {s2}")
+
+            print(" ")
 
         changes.clear()
 
