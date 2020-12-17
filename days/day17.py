@@ -5,17 +5,30 @@ Author: Lari Unkari
 import io, itertools, math, re, modules.userInput
 
 TARGET_CYCLES = 6
-NEIGHBOURS = [p for p in itertools.product([-1,0,1], repeat=4) if p.count(0) < 4]
+NEIGHBOURS3 = [p for p in itertools.product([-1,0,1], repeat=3) if p.count(0) < 3]
+NEIGHBOURS4 = [p for p in itertools.product([-1,0,1], repeat=4) if p.count(0) < 4]
 STAY_ACTIVE = dict.fromkeys([2, 3])
 TURN_ACTIVE = 3
 CUBE_ON = '#'
 CUBE_OFF = '.'
 
-def count_active_neighbours(cubeMap, x, y, z, w, log_level):
+def count_active_neighbours3(cubeMap, x, y, z, w, log_level):
     count = 0
 
     pos:tuple
-    for n in NEIGHBOURS:
+    for n in NEIGHBOURS3:
+        pos = (x + n[0], y + n[1], z + n[2], w)
+        if pos in cubeMap and cubeMap[pos] == CUBE_ON:
+            count += 1
+            if log_level >= 3: print(f"({x},{y},{z}) neighbour {pos} is active! Count: {count}")
+
+    return count
+
+def count_active_neighbours4(cubeMap, x, y, z, w, log_level):
+    count = 0
+
+    pos:tuple
+    for n in NEIGHBOURS4:
         pos = (x + n[0], y + n[1], z + n[2], w + n[3])
         if pos in cubeMap and cubeMap[pos] == CUBE_ON:
             count += 1
@@ -66,9 +79,10 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
                 for z in range(loZ-1, hiZ+2):
                     for w in (range(0, 1) if part_input[1] == 1 else range(loW-1, hiW+2)):
                         coordinate = (x, y, z, w)
-                        neighbourCount = count_active_neighbours(cubeMap, x, y, z, w, log_level)
-
-                        if log_level >= 2: print(f"[{cycle}] cube {coordinate} has {neighbourCount} neighbours")
+                        if part_input[1] == 1:
+                            neighbourCount = count_active_neighbours3(cubeMap, x, y, z, w, log_level)
+                        else:
+                            neighbourCount = count_active_neighbours4(cubeMap, x, y, z, w, log_level)
 
                         if coordinate in cubeMap and cubeMap[coordinate] == CUBE_ON:
                             if neighbourCount in STAY_ACTIVE:
