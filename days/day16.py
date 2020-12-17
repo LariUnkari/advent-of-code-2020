@@ -14,7 +14,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     rules = []
     myTicket = []
-    nearbyTickets = []
+    nearbyTickets = {}
 
     index = 0
     if log_level >= 1: print(f"Reading rules starting at line {index}")
@@ -30,7 +30,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
             index += i + 2
             break
 
-        groups = re.findall("(\w+): (\d+)-(\d+) or (\d+)-(\d+)", line)[0]
+        groups = re.findall("(.*): (\d+)-(\d+) or (\d+)-(\d+)", line)[0]
         rules.append((groups[0], int(groups[1]), int(groups[2]), int(groups[3]), int(groups[4])))
         
     if log_level >= 1: print(f"Reading my ticket at line {index}")
@@ -44,7 +44,8 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
     if log_level >= 1: print(f"Reading nearby tickets starting at line {index}")
 
     for i, line in enumerate(inputs[index:]):
-        nearbyTickets.append([int(d) for d in line.split(',') if line.strip()])
+        if line.strip():
+            nearbyTickets[i] = ([int(d) for d in line.split(',')])
 
     if log_level >= 1: print(f"Found {len(nearbyTickets)} nearby tickets")
     if log_level >= 2:
@@ -52,29 +53,114 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     # Run
     
+    failedTickets = []
     failedValues = []
     fail = None
-    for index, ticket in enumerate(nearbyTickets):
-        for value in ticket:
+
+    for i in nearbyTickets.keys():
+        for value in nearbyTickets[i]:
             fail = value
 
-            for i, rule in enumerate(rules):
+            for r, rule in enumerate(rules):
                 if value >= rule[1] and value <= rule[2]:
-                    if log_level >= 2: print(f"Ticket[{index}] value {value} validated by rule[{i}] {rule[1]}-{rule[2]}")
+                    if log_level >= 3: print(f"Ticket[{i}] value {value} validated by rule[{r}] {rule[1]}-{rule[2]}")
                     fail = None
-                    break
-
-                if value >= rule[3] and value <= rule[4]:
-                    if log_level >= 2: print(f"Ticket[{index}] value {value} validated by rule[{i}] {rule[3]}-{rule[4]}")
+                elif value >= rule[3] and value <= rule[4]:
+                    if log_level >= 3: print(f"Ticket[{i}] value {value} validated by rule[{r}] {rule[3]}-{rule[4]}")
                     fail = None
-                    break
 
             if fail != None:
-                if log_level >= 1: print(f"Ticket[{index}] failed validation of value {fail}")
+                if log_level >= 1: print(f"Ticket[{i}] failed validation of value {fail}")
+                failedTickets.append(i)
                 failedValues.append(fail)
                 break
         
         failedValue = None
 
-    print(f"Failed validation of {len(failedValues)} values: {failedValues}")
+    for i in failedTickets:
+        del nearbyTickets[i]
+
+    ticketCount = len(nearbyTickets)
+    print(f"Failed validation of {len(failedValues)} tickets, {ticketCount} valid tickets remain")
+    if log_level >= 1: print(f"Failed values {failedValues}")
     print(f"Error rate: {sum(failedValues)}")
+    
+    validatedValuesPerRule = {}
+    for i in range(len(myTicket)):
+        validatedValuesPerRule[i] = [0] * len(rules)
+    
+    for i in nearbyTickets.keys():
+        for n, value in enumerate(nearbyTickets[i]):
+            for r, rule in enumerate(rules):
+                if (value >= rule[1] and value <= rule[2]) or (value >= rule[3] and value <= rule[4]):
+                    if log_level >= 3: print(f"Ticket[{index}] value {value} validated by rule[{r}] {rule[1]}-{rule[2]} or {rule[3]}-{rule[4]}")
+                    validatedValuesPerRule[n][r] += 1
+
+    for r in validatedValuesPerRule.keys():
+        if log_level >= 2: print(f"Field {r} validated for rules: {validatedValuesPerRule[r]}")
+
+    ruleIndices = {}
+    fieldRules:list
+
+    while len(ruleIndices) < len(rules):
+        for r in range(len(rules)):
+            if r in ruleIndices:
+                continue
+
+            index = -1
+
+            for n in validatedValuesPerRule.keys():
+                if validatedValuesPerRule[n][r] == ticketCount:
+                    if index == -1:
+                        index = n
+                    else:
+                        if log_level >= 3: print(f"Multiple fields validate rule {r}")
+                        index = -1
+                        break
+
+            if index != -1:
+                if log_level >= 1: print(f"Field {index} is rule {r} '{rules[r][0]}'")
+
+                ruleIndices[r] = index
+                del validatedValuesPerRule[index]
+
+                if log_level >= 2: 
+                    for i in validatedValuesPerRule.keys():
+                        print(f"Field {i} validated for rules: {validatedValuesPerRule[i]}")
+
+        for n in validatedValuesPerRule.keys():
+            index = -1
+
+            for r in range(len(rules)):
+                if validatedValuesPerRule[n][r] == -1:
+                    continue
+
+                if validatedValuesPerRule[n][r] == ticketCount:
+                    if index == -1:
+                        index = r
+                    else:
+                        if log_level >= 3: print(f"Multiple rules validated by field {n}")
+                        index = -1
+                        break
+
+            if index != -1:
+                if log_level >= 1: print(f"Field {n} is rule {index} '{rules[r][0]}'")
+
+                ruleIndices[index] = n
+                for i in validatedValuesPerRule.keys():
+                    fieldRules = validatedValuesPerRule[i][index] = -1
+
+                if log_level >= 2: 
+                    for i in validatedValuesPerRule.keys():
+                        print(f"Field {i} validated for rules: {validatedValuesPerRule[i]}")
+
+    value = 1
+
+    for r, rule in enumerate(rules):
+        if log_level >= 1: print(f"Rule {rule[0]} is field {ruleIndices[r]}")
+
+        if rule[0].startswith("departure"):
+            if log_level >= 1: print(f"My ticket {rule[0]} value is {myTicket[ruleIndices[r]]}")
+            value *= myTicket[ruleIndices[r]]
+
+    print(f"Product of departure values on my ticket: {value}")
