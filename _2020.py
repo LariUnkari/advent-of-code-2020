@@ -67,6 +67,8 @@ while True:
         if input_file == None:
             print(f"No input file found for {USER_INPUT}")
             break
+        
+        part_input = modules.userInput.get_int_input_constrained("\nWhich part to run? 1-2 (defaults to 2): ", 1, 2, 2)
 
         #Input is a Tuple of (was_parse_success, list_of_int_values)
         program_input = modules.userInput.get_int_list_input("\nProgram input: ",
@@ -84,7 +86,7 @@ while True:
         log_level_input = modules.userInput.get_int_input("\nLog level (defaults to level zero): ", None)
 
         print("\n\n************************\n")
-        mod.play(params[1], program_input[1], log_level_input[1] if log_level_input[0] else 0)
+        mod.play(params[1], part_input[1], program_input[1], log_level_input[1] if log_level_input[0] else 0)
         print(f"\nModule {mod.__name__} program ended\n\n")
 
 print("Goodbye and Merry Christmas 2020!")

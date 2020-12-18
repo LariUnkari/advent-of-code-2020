@@ -36,7 +36,7 @@ def count_active_neighbours4(cubeMap, x, y, z, w, log_level):
 
     return count
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     # Initialize and read input
 
@@ -59,10 +59,6 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         for x, cube in enumerate(row):
             cubeMap[(loX + x, loY + y, z, w)] = cube
 
-    # Select which part of day to run
-    
-    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
-
     # Run
 
     cycle = 0
@@ -77,9 +73,9 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         for x in range(loX-1, hiX+2):
             for y in range(loY-1, hiY+2):
                 for z in range(loZ-1, hiZ+2):
-                    for w in (range(0, 1) if part_input[1] == 1 else range(loW-1, hiW+2)):
+                    for w in (range(0, 1) if day_part == 1 else range(loW-1, hiW+2)):
                         coordinate = (x, y, z, w)
-                        if part_input[1] == 1:
+                        if day_part == 1:
                             neighbourCount = count_active_neighbours3(cubeMap, x, y, z, w, log_level)
                         else:
                             neighbourCount = count_active_neighbours4(cubeMap, x, y, z, w, log_level)
@@ -114,7 +110,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
         # This prints a pretty map z layer at a time, but skips it in part 2 and 4D map
         # Similar to looks of sample in the puzzle, but doesn't fool the user and actually prints X and Y coordinates
-        if log_level >= 1 and part_input[1] == 1:
+        if log_level >= 1 and day_part == 1:
             s1:str
             s2:str
             for z in range(loZ, hiZ+1):

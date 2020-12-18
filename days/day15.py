@@ -6,7 +6,7 @@ import io, itertools, math, re, modules.userInput
 
 TARGETS = [2020, 30000000]
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     # Initialize and read input
     
@@ -15,11 +15,10 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     # Select which part of day to run
     
-    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
-    target = TARGETS[part_input[1] - 1]
+    target = TARGETS[day_part - 1]
     print(f"Target turn is: {target}")
 
-    if part_input[1] == 2: print(f"Brute force goes BRRRRRRRR just fine! :D")
+    if day_part == 2: print(f"Brute force goes BRRRRRRRR just fine! :D")
 
     # Run
 

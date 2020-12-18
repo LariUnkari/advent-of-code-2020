@@ -117,15 +117,11 @@ def validate_part_2(fieldsToValidate, index, entry, log_level):
 
     return True
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     #Initialize and read input
 
     entries = process_data(input_stream, log_level)
-
-    # Select which part of day to run
-    
-    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
 
     # Run
     
@@ -134,7 +130,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
     fieldsToValidate = dict.fromkeys(VALIDATE_FIELDS.keys(), False)
     for index, entry in enumerate(entries):
 
-        if part_input[1] == 1:
+        if day_part == 1:
             if validate_part_1(fieldsToValidate, index, entry, log_level):
                 countValid += 1
         else:

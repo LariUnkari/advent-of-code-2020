@@ -100,7 +100,7 @@ def run_part_2(instructions, x, y, wx, wy, log_level):
 
     return (x,y)
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     # Initialize and read input
     
@@ -108,15 +108,11 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     if log_level >= 1: print(f"Found {len(instructions)} instructions")
 
-    # Select which part of day to run
-    
-    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
-
     # Run
 
     x, y = 0, 0
 
-    if part_input[1] == 1:
+    if day_part == 1:
         x, y = run_part_1(instructions, x, y, INITIAL_DIR, log_level)
     else:
         x, y = run_part_2(instructions, x, y, INITIAL_WAYPOINT[0], INITIAL_WAYPOINT[1], log_level)

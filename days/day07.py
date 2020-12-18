@@ -52,7 +52,7 @@ def count_children_of(allBagsDict, bagType, log_level):
     return directChildCount + childrenFound
 
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     #Initialize and read input
 
@@ -79,15 +79,11 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         if log_level >= 2:
             for c in bags[bagType]: print(f"Can contain {c[0]} of '{c[1]}'")
 
-    # Select which part of day to run
-    
-    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
-
     # Run
 
     bagDict = {}
 
-    if part_input[1] == 1:
+    if day_part == 1:
         for bagType in bags.keys():
             check_bag_for(bags, bagDict, bagType, MY_BAG, log_level)
 

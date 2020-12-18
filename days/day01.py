@@ -37,7 +37,7 @@ def getProductThreeElements(expenses, log_level):
     return ([], -1)
 
 
-def play(input_file, input_parameters, log_level):
+def play(input_file, day_part, input_parameters, log_level):
     
 
     #Initialize and read input

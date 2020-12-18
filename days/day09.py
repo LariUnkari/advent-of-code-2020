@@ -4,7 +4,7 @@ Author: Lari Unkari
 
 import io, re, modules.userInput
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     # Initialize and read input
     

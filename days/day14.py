@@ -25,7 +25,7 @@ def write_to_memory(memory, pos, val, log_level):
     memory[pos] = val
 
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     # Initialize and read input
     
@@ -54,10 +54,6 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     if log_level >= 1: print(f"Found {len(instructions)} instructions\n")
 
-    # Select which part of day to run
-    
-    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
-
     # Run
 
     mask = ["X"] * MASK_LENGTH
@@ -83,7 +79,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         else:
             if log_level >= 1: print(f"[{index}] '{cmd}'[{pos}] = '{val}'")
             
-            if part_input[1] == 1:
+            if day_part == 1:
                 s = "{0:b}".format(val)
                 if log_level >= 2: print(f"Input value {val}, binary {s}")
             else:
@@ -93,7 +89,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
             for i in range(MASK_LENGTH):
                 address = -1-i
 
-                if part_input[1] == 1:
+                if day_part == 1:
                     if mask[address] != "X":
                         binary[address] = mask[address]
                     elif i < len(s):
@@ -111,7 +107,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
                     else:
                         binary[address] = "0"
 
-            if part_input[1] == 1:
+            if day_part == 1:
                 write_to_memory(memory, pos, parse_binary(binary, "value", log_level), log_level)
             else:
                 if len(floats) > 0:

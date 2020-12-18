@@ -6,7 +6,7 @@ import io, itertools, math, re, modules.userInput
 
 TARGETS = [2020, 30000000]
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     # Initialize and read input
     

@@ -41,7 +41,7 @@ def count_neighbours(x, y, width, height, layout, allowDistance, rule, stopAt, l
 
     return adjacentSeats
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     # Initialize and read input
     
@@ -57,7 +57,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     # Run
 
-    allowDistance = part_input[1] != 1
+    allowDistance = day_part != 1
 
     changes = []
     adjacentSeats:int

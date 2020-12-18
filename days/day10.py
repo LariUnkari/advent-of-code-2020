@@ -8,7 +8,7 @@ DIFF_MIN = 1
 DIFF_MAX = 3
 DEVICE_DIFF = 3
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     # Initialize and read input
     
@@ -23,13 +23,9 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     if log_level >= 1: print(f"Device will be at {deviceRating} jolts")
 
-    # Select which part of day to run
-    
-    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
-
     # Run
 
-    if part_input[1] == 1:
+    if day_part == 1:
         diffCounts = {}
         for i in range(DIFF_MIN, DIFF_MAX + 1):
             diffCounts[i] = 0

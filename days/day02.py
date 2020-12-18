@@ -64,7 +64,7 @@ def checkPasswords(entries, part_num, log_level):
     print(f"Found a total of {countValid} valid passwords out of {countProcessed}")
 
 
-def play(input_file, input_parameters, log_level):
+def play(input_file, day_part, input_parameters, log_level):
     
 
     #Initialize and read input

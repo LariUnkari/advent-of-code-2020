@@ -14,7 +14,7 @@ def find_multiplier(mod, val, multiplier, time):
 
     return (multiplier, time)
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     # Initialize and read input
     
@@ -33,13 +33,9 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
     if log_level >= 1: print(f"Found {len(buses)} buses\n")
 
-    # Select which part of day to run
-    
-    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
-
     # Run
 
-    if part_input[1] == 1:
+    if day_part == 1:
         time:int
         wait:int
         shift:int

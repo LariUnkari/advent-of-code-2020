@@ -24,7 +24,7 @@ def walk_map(map, startRow, startColumn, slope, log_level):
     print(f"Trees found on slope {slope}: {countTrees}")
     return countTrees
 
-def play(input_file, input_parameters, log_level):
+def play(input_file, day_part, input_parameters, log_level):
     
     #Initialize and read input
 
@@ -34,13 +34,9 @@ def play(input_file, input_parameters, log_level):
         if log_level >= 1:
             print(f"Input string {index}: '{map[index]}'")
 
-    # Select which part of day to run
-
-    partInput = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
-
     # Run
     
-    if partInput[1] == 1:
+    if day_part == 1:
         walk_map(mapData, 0, SLOPES[1][0], SLOPES[1], log_level)
     else:
         countTrees = 0

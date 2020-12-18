@@ -6,16 +6,12 @@ import io, re, modules.userInput
 
 
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     #Initialize and read input
 
     inputs = [group.split('\n') for group in input_stream.read().split('\n\n')]
     if log_level >= 3: print(f"Inputs:\n{inputs}")
-
-    # Select which part of day to run
-    
-    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
 
     # Run
     
@@ -30,7 +26,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
 
         for id, person in enumerate(group):
             for answer in person:
-                if part_input[1] == 1:
+                if day_part == 1:
                     groupAnswers[answer] = True
                 else:
                     if answer in groupAnswerCounts[index]:
@@ -40,7 +36,7 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
             
         groups[index] = groupAnswers;
 
-        if part_input[1] == 1:
+        if day_part == 1:
             if log_level >= 1: print(f"Group {index} answered yes to {len(groupAnswers)} questions")
         else:
             for answer, count in groupAnswerCounts[index].items():

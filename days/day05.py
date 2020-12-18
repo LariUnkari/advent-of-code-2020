@@ -28,7 +28,7 @@ def find_position(index, steps, upper, capacity, log_level):
 
     return end
 
-def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
+def play(input_stream:io.TextIOWrapper, day_part, input_parameters, log_level):
     
     #Initialize and read input
 
@@ -38,10 +38,6 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         if log_level >= 1:
             print(f"Seat {i} data: {inputs[i][:7]},{inputs[i][7:]}")
         entries.append((inputs[i][:7], inputs[i][7:]))
-
-    # Select which part of day to run
-    
-    part_input = modules.userInput.get_int_input_constrained("Which part to run? 1-2 (defaults to 2): ", 1, 2, 2)
 
     # Run
 
@@ -59,13 +55,13 @@ def play(input_stream:io.TextIOWrapper, input_parameters, log_level):
         if log_level >= 1:
             print(f"Seat {index} position is R[{entry[0]}]:{row} C[{entry[1]}]:{col} ID:{id}")
 
-        if part_input[1] == 1:
+        if day_part == 1:
             if id > highest_id:
                 highest_id = id
         else:
             seats[id] = (row, col)
 
-    if part_input[1] == 1:
+    if day_part == 1:
         print(f"Highest seat ID:{highest_id}")
     else:
         for i in range(ROWS * COLS):
